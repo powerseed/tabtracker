@@ -1,6 +1,6 @@
 const axios = require('axios')
 
-const URL = "http://localhost:8081/"
+const URL = ""
 
 export default {
   register(credentials) {
