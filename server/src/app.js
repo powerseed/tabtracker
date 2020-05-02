@@ -77,10 +77,10 @@ const Bookmark = sequelize.define('bookmark',
     });
 
 if(process.env.NODE_ENV == 'production'){
-    app.use(express.static(__dirname + '../public'))
+    app.use(express.static('/public'))
 
     app.get(/.*/, function (req, res) {
-        res.sendFile(__dirname + '../public/index.html')
+        res.sendFile(path.resolve(__dirname, '../public/index.html'))
     })
 }
 
@@ -89,7 +89,7 @@ const port = process.env.PORT || 8081;
 
 // Initialize the database
 sequelize.sync().then(function () {
-        app.listen(port, console.log("Server is running on " + port))
+        app.listen(port, console.log('public'))
     }
 )
 
