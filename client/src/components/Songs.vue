@@ -69,7 +69,7 @@
       },
       data(){
         return{
-          songs: null,
+          songs: {},
           search: '',
           headers: [
             { text: 'Title', value: 'title' },
@@ -77,37 +77,49 @@
             { text: 'Album', value: 'album' },
             { text: '', value: 'action' }
           ],
-          bookmarks:[],
+          bookmarks: [],
         }
       },
       async mounted() {
-        if(this.$store.state.isUserLoggedIn){
-          const bookmarksOfThisUser = (await api.getAllBookmarks(this.$store.state.user.id)).data;
-          console.log(bookmarksOfThisUser);
-          for(let bookmark in bookmarksOfThisUser){
-            const song = (await api.getASong(bookmarksOfThisUser[bookmark]['songId'])).data;
-            this.bookmarks.push(song)
-          }
-        }
-      },
-      watch:{
-        search(){
-          const route = {
-            name: 'songs'
-          }
-          route.query = {
-            search: this.search
-          }
-          this.$router.push(route)
-        },
-        "$route.query.search":{
-          immediate: true,
-          async handler(value){
-            this.search = value
-            this.songs = (await api.getSongs(this.search)).data;
+        const response = (await api.getSongs(this.search))
+        this.songs = response.data;
+        console.log({response})
+        console.log(this.songs)
+
+        if(this.$store.state.isUserLoggedIn) {
+          const response = await api.getAllBookmarks(this.$store.state.user.id);
+          const bookmarksOfThisUser = response.data;
+
+          if (Array.isArray(bookmarksOfThisUser)) {
+            for (var bookmark in bookmarksOfThisUser) {
+              const song = (await api.getASong(bookmarksOfThisUser[bookmark]['songId'])).data;
+              this.bookmarks.push(song)
+            }
+          } else {
+            // example only of logging the data that is not as expected
+            // console.log({response})
+            // console.log({bookmarksOfThisUser})
           }
         }
       }
+      // watch:{
+      //   search(){
+      //     const route = {
+      //       name: 'songs'
+      //     }
+      //     route.query = {
+      //       search: this.search
+      //     }
+      //     this.$router.push(route)
+      //   },
+      //   "$route.query.search":{
+      //     immediate: true,
+      //     async handler(value){
+      //       this.search = value
+      //       this.songs = (await api.getSongs(this.search)).data;
+      //     }
+      //   }
+      // }
     }
 </script>
 

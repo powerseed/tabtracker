@@ -12,6 +12,8 @@ module.exports = {
     proxyTable: {
       '/': {
         target: 'http://localhost:8081',
+        changeOrigin: true,
+        toProxy: true
       }
     },
 

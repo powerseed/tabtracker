@@ -13,11 +13,6 @@ Vue.use(Router)
 export default new Router({
   routes: [
     {
-      path: '*',
-      name: 'home',
-      component: Songs
-    },
-    {
       path: '/register',
       name: 'register',
       component: Register

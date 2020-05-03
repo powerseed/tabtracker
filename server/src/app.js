@@ -6,22 +6,30 @@ const {Op} = require('sequelize');
 const jwt = require("jsonwebtoken")
 const Promise = require("bluebird");
 const bcrypt = Promise.promisifyAll(require('bcrypt-nodejs'));
-
+const path = require('path');
 const app = express()
+const http = require('http');
 
 app.use(cors())
 app.use(bodyParser.json())
 
 // Define database
-const sequelize = new Sequelize(
-    process.env.DB_NAME || 'tabtracker',
-    process.env.DB_USER || 'JiehaoLuo',
-    process.env.DB_PASS || '111111',
-    {
-        dialect: process.env.DIALECT || 'sqlite',
-        host: process.env.HOST || 'localhost',
-        storage: './tabtracker.sqlite'
-    });
+const sequelize = new Sequelize('tabtracker', 'postgres', '11111111', {
+    host: 'localhost',
+    dialect: 'postgres',
+    pool: {
+        max: 9,
+        min: 0,
+        idle: 10000
+    }
+});
+
+// const sequelize = new Sequelize('dbe9g9br1tfti3', 'lyznltvikrafxj', '97989277850e5080a98eddd1a48f4cf6ebe2ebbd8920446e8b04485f62ab582e', {
+//     host: 'ec2-18-206-84-251.compute-1.amazonaws.com',
+//     port: 5432,
+//     dialect: 'postgres',
+//     logging: true
+// });
 
 // Create User table
 const User = sequelize.define('user',
@@ -77,21 +85,26 @@ const Bookmark = sequelize.define('bookmark',
     });
 
 if(process.env.NODE_ENV == 'production'){
-    app.use(express.static('/public'))
+    app.use(express.static(path.resolve(__dirname, '../public')))
 
     app.get(/.*/, function (req, res) {
         res.sendFile(path.resolve(__dirname, '../public/index.html'))
     })
 }
 
-
 const port = process.env.PORT || 8081;
 
 // Initialize the database
 sequelize.sync().then(function () {
-        app.listen(port, console.log('public'))
+        app.listen(port, console.log('Server running on' + port))
     }
 )
+
+// sequelize.sync().then(function() {
+//     http.createServer(app).listen(port, function(){
+//         console.log('Express server listening on port ' + port);
+//     });
+// });
 
 // RESTful Api
 app.post('/register', async function (req, res) {
@@ -144,41 +157,41 @@ app.post('/login', async function (req, res) {
 // getAllSongs
 app.get("/songs", async function (req, res) {
     try{
-        let allSongs = null;
-        const search = req.query.search;
-        if(search){
-            allSongs = await Song.findAll({
-                where:{
-                    [Op.or]: [
-                        {
-                            title: {
-                                [Op.like]: `%${search}%`
-                            }
-                        },
-                        {
-                            genre: {
-                                [Op.like]: `%${search}%`
-                            }
-                        },
-                        {
-                            artist: {
-                                [Op.like]: `%${search}%`
-                            }
-                        },
-                        {
-                            album: {
-                                [Op.like]: `%${search}%`
-                            }
-                        }
-                    ]
-                }
-            })
-        }
-        else {
-            allSongs = await Song.findAll({
+        // let allSongs = null;
+        // const search = req.query.search;
+        // if(search){
+        //     allSongs = await Song.findAll({
+        //         where:{
+        //             [Op.or]: [
+        //                 {
+        //                     title: {
+        //                         [Op.like]: `%${search}%`
+        //                     }
+        //                 },
+        //                 {
+        //                     genre: {
+        //                         [Op.like]: `%${search}%`
+        //                     }
+        //                 },
+        //                 {
+        //                     artist: {
+        //                         [Op.like]: `%${search}%`
+        //                     }
+        //                 },
+        //                 {
+        //                     album: {
+        //                         [Op.like]: `%${search}%`
+        //                     }
+        //                 }
+        //             ]
+        //         }
+        //     })
+        // }
+        // else {
+            let allSongs = await Song.findAll({
                 limit: 10
             })
-        }
+        // }
         res.send(allSongs);
     }
     catch (e) {

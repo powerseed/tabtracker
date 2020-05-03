@@ -13,6 +13,9 @@ export default {
     return axios.get(URL + "songs", {
       params:{
         search: search
+      },
+      headers: {
+        Accept: 'application/json'
       }
     });
   },
@@ -23,13 +26,20 @@ export default {
     return axios.put(URL + "edit/" + songId, song);
   },
   getASong(songId){
-    return axios.get(`${URL}songs/${songId}`);
+    return axios.get(`${URL}songs/${songId}`, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    });
   },
   getABookmark(userId, songId){
     return axios.get(`${URL}bookmark`, {
       params:{
         userId: userId,
         songId: songId
+      },
+      headers: {
+        'Content-Type': 'application/json'
       }
     });
   },
@@ -37,6 +47,9 @@ export default {
     return axios.get(`${URL}allBookmarks`, {
       params:{
         userId: userId,
+      },
+      headers: {
+        'Content-Type': 'application/json'
       }
     });
   },
