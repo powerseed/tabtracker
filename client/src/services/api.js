@@ -15,7 +15,7 @@ export default {
         search: search
       },
       headers: {
-        Accept: 'application/json'
+        'Content-Type': 'application/json'
       }
     });
   },

@@ -83,8 +83,6 @@
       async mounted() {
         const response = (await api.getSongs(this.search))
         this.songs = response.data;
-        console.log({response})
-        console.log(this.songs)
 
         if(this.$store.state.isUserLoggedIn) {
           const response = await api.getAllBookmarks(this.$store.state.user.id);
@@ -96,30 +94,29 @@
               this.bookmarks.push(song)
             }
           } else {
-            // example only of logging the data that is not as expected
-            // console.log({response})
-            // console.log({bookmarksOfThisUser})
+            console.log({response})
+            console.log({bookmarksOfThisUser})
+          }
+        }
+      },
+      watch:{
+        search(){
+          const route = {
+            name: 'songs'
+          }
+          route.query = {
+            search: this.search
+          }
+          this.$router.push(route)
+        },
+        "$route.query.search":{
+          immediate: true,
+          async handler(value){
+            this.search = value
+            this.songs = (await api.getSongs(this.search)).data;
           }
         }
       }
-      // watch:{
-      //   search(){
-      //     const route = {
-      //       name: 'songs'
-      //     }
-      //     route.query = {
-      //       search: this.search
-      //     }
-      //     this.$router.push(route)
-      //   },
-      //   "$route.query.search":{
-      //     immediate: true,
-      //     async handler(value){
-      //       this.search = value
-      //       this.songs = (await api.getSongs(this.search)).data;
-      //     }
-      //   }
-      // }
     }
 </script>
 
