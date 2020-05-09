@@ -1,5 +1,5 @@
 # tabtracker
-An app developed using Vue and Express to organize songs.
+An single page app that organizes songs developed using Vue and Express.
 Users can:
 1. Create accounts.
 2. Create, edit, search for and delete songs.
