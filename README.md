@@ -1,7 +1,9 @@
 # tabtracker
 An single page app that organizes songs developed using Vue and Express.
 <br>
+<br>
 (*I developed it by following an online tutorial.*)
+<br>
 <br>
 Users can:
 1. Create accounts.
