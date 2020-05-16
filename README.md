@@ -12,3 +12,9 @@ Users can:
 4. View matadata and Youtube videos of songs. 
 ## Heroku link:
 https://immense-refuge-12167.herokuapp.com/
+<br>
+Test account:
+<br>
+email: powerseed5044@gmail.com
+<br>
+password: 11111111 
